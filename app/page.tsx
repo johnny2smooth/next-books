@@ -1,93 +1,55 @@
-import Image from "next/image";
-import { Inter } from "@next/font/google";
 import styles from "./page.module.css";
+const { Client } = require("@notionhq/client");
+import {
+  PageObjectResponse,
+  QueryDatabaseResponse,
+} from "@notionhq/client/build/src/api-endpoints";
 
-const inter = Inter({ subsets: ["latin"] });
+const notion = new Client({
+  auth: process.env.NOTION_TOKEN,
+});
 
-export default function Home() {
+async function getBooks() {
+  const response = await notion.databases.query({
+    database_id: process.env.NOTION_DATABASE_ID,
+  });
+
+  return response.results as QueryDatabaseResponse["results"];
+}
+
+export default async function Home() {
+  const books = await getBooks();
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+      <h1>Books</h1>
+      {books.map((book) => {
+        const { id, properties } = book as PageObjectResponse;
+        const { Rating, Review, Author, Created, Genre, Reviewer, Name } =
+          properties;
 
-      <p>hola</p>
+        // I should be handling the types elsewhere, but this is just a quick example
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+        return (
+          <div key={id}>
+            <h1>
+              {Name.type === "title" && Name.title[0].plain_text} by{" "}
+              {Author.type === "rich_text" && Author.rich_text[0].plain_text}
+            </h1>
+            <p>
+              A {Genre.type === "select" && Genre.select.name} book reviewed by{" "}
+              {Reviewer.type === "rich_text" &&
+                Reviewer.rich_text[0].plain_text}
+            </p>
+            <p>
+              {Review.type === "rich_text" && Review.rich_text[0].plain_text}
+            </p>
+            <p>
+              {Rating.type === "rich_text" && Rating.rich_text[0].plain_text}
+            </p>
+          </div>
+        );
+      })}
     </main>
   );
 }
