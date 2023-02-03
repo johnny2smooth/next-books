@@ -23,32 +23,53 @@ export default async function Home() {
 
   return (
     <main className={`${styles.main} `}>
-      <div className="border-2 border-slate-200 rounded-md grid p-6 gap-4">
+      <div className="border-2 bg-slate-50 border-slate-300 rounded-md grid p-6 gap-8 max-h-[75vh] overflow-scroll shadow-[inset_5px_-25px_40px_-25px] shadow-slate-200">
         {books.map((book) => {
           const { id, properties, icon } = book as PageObjectResponse;
           let { Rating, Review, Author, Genre, Reviewer, Name } = properties;
 
           let emoji = icon?.type === "emoji" ? icon.emoji : "📖";
 
+          let title = Name.type === "title" ? Name.title[0].plain_text : "";
+          let author =
+            Author.type === "rich_text" ? Author.rich_text[0].plain_text : "";
+
           return (
-            <div key={id} className="border-2 border-slate-300 rounded">
-              <h1>
-                {emoji} {Name.type === "title" && Name.title[0].plain_text} by{" "}
-                {Author.type === "rich_text" && Author.rich_text[0].plain_text}
-              </h1>
-              <p>
-                A {Genre.type === "select" && Genre.select.name} book reviewed
-                by{" "}
-                {Reviewer.type === "rich_text" &&
-                  Reviewer.rich_text[0].plain_text}
-              </p>
-              <p>
-                {Review.type === "rich_text" && Review.rich_text[0].plain_text}
-              </p>
-              <p>
-                {Rating.type === "rich_text" && Rating.rich_text[0].plain_text}
-              </p>
-            </div>
+            <a
+              key={id}
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://www.google.com/search?q=${(title + " " + author)
+                .split(" ")
+                .join("+")}&oq=${title.split(" ").join("+")}`}
+            >
+              <div className="border-2 border-slate-100 rounded p-4 stack max-w-xl px-4 bg-slate-50 text-slate-900 shadow-sm shadow-slate-400 hover:shadow-[20px_25px_30px_-15px_rgba(0,0,0,.5)]  hover:border-slate-200 hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-300 ease-in-out transform hover:scale-103 ">
+                <h2 className="text-4xl">
+                  {emoji} {title}{" "}
+                  <span className="text-sm">
+                    by{" "}
+                    {Author.type === "rich_text" &&
+                      Author.rich_text[0].plain_text}
+                  </span>
+                </h2>
+                <p className="px-4 py-2 bg-slate-100 text-slate-900 rounded-md">
+                  {Review.type === "rich_text" &&
+                    Review.rich_text[0].plain_text}
+                </p>
+                <div className="flex justify-between">
+                  <p className="text-sm">
+                    A {Genre.type === "select" && Genre.select.name} book
+                    reviewed by{" "}
+                    {Reviewer.type === "rich_text" &&
+                      Reviewer.rich_text[0].plain_text}
+                  </p>
+                  <p>
+                    {Rating.type === "rich_text" &&
+                      Rating.rich_text[0].plain_text}
+                  </p>
+                </div>
+              </div>
+            </a>
           );
         })}
       </div>
