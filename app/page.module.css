@@ -1,7 +1,6 @@
 .main {
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   min-height: 100vh;
   border: 3px solid white;

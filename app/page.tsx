@@ -1,5 +1,7 @@
 import styles from "./page.module.css";
 const { Client } = require("@notionhq/client");
+import NotionForm from "./NotionForm";
+
 import {
   PageObjectResponse,
   QueryDatabaseResponse,
@@ -13,8 +15,6 @@ async function getBooks() {
   const response = await notion.databases.query({
     database_id: process.env.NOTION_DATABASE_ID,
   });
-
-  // return response.results as QueryDatabaseResponse["results"];
   return response.results as QueryDatabaseResponse["results"];
 }
 
@@ -22,7 +22,7 @@ export default async function Home() {
   const books = await getBooks();
 
   return (
-    <main className={`${styles.main} `}>
+    <main className={`${styles.main} flex-wrap space-x-4`}>
       <div className="border-2 bg-slate-50 border-slate-300 rounded-md grid p-6 gap-8 max-h-[75vh] overflow-scroll shadow-[inset_5px_-25px_40px_-25px] shadow-slate-200">
         {books.map((book) => {
           const { id, properties, icon } = book as PageObjectResponse;
@@ -73,6 +73,7 @@ export default async function Home() {
           );
         })}
       </div>
+      <NotionForm />
     </main>
   );
 }
