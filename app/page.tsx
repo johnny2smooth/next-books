@@ -1,6 +1,7 @@
 import styles from "./page.module.css";
 const { Client } = require("@notionhq/client");
 import NotionForm from "./NotionForm";
+import Image from "next/image";
 
 import {
   PageObjectResponse,
@@ -23,6 +24,13 @@ export default async function Home() {
 
   return (
     <main className={`${styles.main} flex-wrap space-x-4`}>
+      <Image
+        src="/meme.png"
+        height={300}
+        width={300}
+        alt="issa me"
+        className="invert"
+      />
       <div className="border-2 bg-slate-50 border-slate-300 rounded-md grid p-6 gap-8 max-h-[75vh] overflow-scroll shadow-[inset_5px_-25px_40px_-25px] shadow-slate-200">
         {books.map((book) => {
           const { id, properties, icon } = book as PageObjectResponse;
@@ -74,6 +82,29 @@ export default async function Home() {
         })}
       </div>
       <NotionForm />
+      <div className="flex flex-col justify-center items-center space-x-2 space-y-2">
+        <Image
+          src="/berserk2x.png"
+          width={150}
+          height={150}
+          alt="berserk, my favorite graphic novel of all time."
+          className="invert"
+        />
+        <Image
+          src="/tennis2x.png"
+          alt="tennis is my favorite sport"
+          width={100}
+          height={100}
+          className="invert"
+        />
+        <Image
+          src="/moka2x.png"
+          alt="moka is my favorite coffee maker"
+          width={100}
+          height={100}
+          className="invert"
+        />
+      </div>
     </main>
   );
 }
