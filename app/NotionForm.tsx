@@ -17,7 +17,7 @@ export default function PostBookToNotion() {
       emoji: "🥹",
     };
 
-    const response = await fetch("/api/form", {
+    const response = await fetch("/api/notion-form", {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
