@@ -76,8 +76,8 @@ export default async function handler(
         },
       },
     });
-    res.status(200).json({ data: `${book}` });
+    res.status(200).json({ data: `${book}`, submitted: true });
   } else {
-    res.status(405).json({ message: "Method not allowed" });
+    res.status(405).json({ error: "Method not allowed", submitted: false });
   }
 }

@@ -1,12 +1,13 @@
 import styles from "./page.module.css";
-const { Client } = require("@notionhq/client");
+import { Client } from "@notionhq/client";
 import NotionForm from "./NotionForm";
 import Image from "next/image";
-
-import {
-  PageObjectResponse,
-  QueryDatabaseResponse,
-} from "@notionhq/client/build/src/api-endpoints";
+import me from "../public/meme.png";
+import berserk from "../public/berserk2x.png";
+import tennis from "../public/tennis2x.png";
+import moka from "../public/moka2x.png";
+import BookList from "./BookList";
+import { QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints";
 
 const notion = new Client({
   auth: process.env.NOTION_TOKEN,
@@ -14,7 +15,7 @@ const notion = new Client({
 
 async function getBooks() {
   const response = await notion.databases.query({
-    database_id: process.env.NOTION_DATABASE_ID,
+    database_id: process.env.NOTION_DATABASE_ID || "",
   });
   return response.results as QueryDatabaseResponse["results"];
 }
@@ -23,82 +24,32 @@ export default async function Home() {
   const books = await getBooks();
 
   return (
-    <main className={`${styles.main} flex-wrap space-x-4`}>
+    <main className={`${styles.main} flex-wrap space-x-4 space-y-4 pr-4`}>
       <Image
-        src="/meme.png"
-        height={300}
-        width={300}
+        src={me}
+        placeholder="blur"
         alt="issa me"
         className="invert"
+        width={300}
       />
-      <div className="border-2 bg-slate-50 border-slate-300 rounded-md grid p-6 gap-8 max-h-[75vh] overflow-scroll shadow-[inset_5px_-25px_40px_-25px] shadow-slate-200">
-        {books.map((book) => {
-          const { id, properties, icon } = book as PageObjectResponse;
-          let { Rating, Review, Author, Genre, Reviewer, Name } = properties;
-
-          let emoji = icon?.type === "emoji" ? icon.emoji : "📖";
-
-          let title = Name.type === "title" ? Name.title[0].plain_text : "";
-          let author =
-            Author.type === "rich_text" ? Author.rich_text[0].plain_text : "";
-
-          return (
-            <a
-              key={id}
-              target="_blank"
-              rel="noopener noreferrer"
-              href={`https://www.google.com/search?q=${(title + " " + author)
-                .split(" ")
-                .join("+")}&oq=${title.split(" ").join("+")}`}
-            >
-              <div className="border-2 border-slate-100 rounded p-4 stack max-w-xl px-4 bg-slate-50 text-slate-900 shadow-sm shadow-slate-400 hover:shadow-[20px_25px_30px_-15px_rgba(0,0,0,.5)]  hover:border-slate-200 hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-300 ease-in-out transform hover:scale-103 ">
-                <h2 className="text-4xl">
-                  {emoji} {title}{" "}
-                  <span className="text-sm">
-                    by{" "}
-                    {Author.type === "rich_text" &&
-                      Author.rich_text[0].plain_text}
-                  </span>
-                </h2>
-                <p className="px-4 py-2 bg-slate-100 text-slate-900 rounded-md">
-                  {Review.type === "rich_text" &&
-                    Review.rich_text[0].plain_text}
-                </p>
-                <div className="flex justify-between">
-                  <p className="text-sm">
-                    A {Genre.type === "select" && Genre.select.name} book
-                    reviewed by{" "}
-                    {Reviewer.type === "rich_text" &&
-                      Reviewer.rich_text[0].plain_text}
-                  </p>
-                  <p>
-                    {Rating.type === "rich_text" &&
-                      Rating.rich_text[0].plain_text}
-                  </p>
-                </div>
-              </div>
-            </a>
-          );
-        })}
-      </div>
+      <BookList books={books} />
       <NotionForm />
       <div className="flex flex-col justify-center items-center space-x-2 space-y-2">
         <Image
-          src="/berserk2x.png"
+          src={berserk}
           width={150}
-          height={150}
           alt="berserk, my favorite graphic novel of all time."
           className="invert"
         />
         <Image
-          src="/tennis2x.png"
+          src={tennis}
           alt="tennis is my favorite sport"
           width={100}
           height={100}
           className="invert"
         />
         <Image
-          src="/moka2x.png"
+          src={moka}
           alt="moka is my favorite coffee maker"
           width={100}
           height={100}
