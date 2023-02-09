@@ -1,9 +1,13 @@
 "use client";
 import { useState } from "react";
 import { FormEvent } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import smilesmiley from "../public/smilesmiley.png";
 
 export default function PostBookToNotion() {
-  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(true);
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
@@ -25,21 +29,61 @@ export default function PostBookToNotion() {
       },
       method: "POST",
     });
-
     const result = await response.json();
-    console.log(result);
     result.submitted && setHasSubmitted(true);
   };
-  console.log(hasSubmitted);
 
   return (
-    <div className="h-[75vh] border-2 border-slate-300 rounded-md p-2 stack w-2xl overflow-scroll shadow-[inset_5px_-25px_40px_-25px] shadow-slate-200 text-slate-200">
+    <div className="h-[75vh] max-w-sm border-2 border-slate-300 rounded-md p-2 stack w-2xl overflow-scroll shadow-[inset_5px_-25px_40px_-25px] shadow-slate-200 text-slate-200">
       {hasSubmitted ? (
         <FormSubmissionConfirmation />
       ) : (
         <FormContents handleSubmit={handleSubmit} />
       )}
     </div>
+  );
+}
+
+function FormSubmissionConfirmation() {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ ease: "easeOut", duration: 0.5 }}
+      className="flex flex-col justify-center items-center stack px-4"
+    >
+      <h2 className="text-4xl font-semibold text-center">✨Thank you✨</h2>
+      <p className="text-center">your book review was succesfully submitted</p>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ ease: "easeOut", duration: 3 }}
+      >
+        <Image
+          src={smilesmiley}
+          alt="smiley face"
+          className="invert"
+          width={100}
+          height={100}
+        />
+      </motion.div>
+      <p className="text-left">You should see your submission here shortly.</p>
+
+      <p className="text-left">
+        In the meantime, we would like to recommend two books to you based on
+        what you recommended to us. Are you interested?
+      </p>
+      <motion.div className="w-full flex spacing-x-4 justify-around">
+        <button className="w-[33%] border-2 border-red-500 text-slate-900 rounded-md py-2 bg-red-300 hover:bg-red-400 focus:bg-red-400 focus:font-semibold hover:font-semibold transition-color shadow-sm shadow-red-500 ease-in-out duration-600 active:shadow-[0_0_20px_5px] active:shadow-red-500 active:bg-red-300 active:border-slate-200 active:text-slate-900">
+          no
+        </button>
+        <button className="w-[33%] border-2 border-green-500 text-slate-900 rounded-md py-2 bg-green-300 hover:bg-green-400 focus:bg-green-400 focus:font-semibold hover:font-semibold transition-color shadow-sm shadow-green-500 ease-in-out duration-600 active:shadow-[0_0_20px_5px] active:shadow-green-500 active:bg-green-300 active:border-slate-200 active:text-slate-900">
+          yes
+        </button>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -132,18 +176,5 @@ function FormContents({
         Submit
       </button>
     </form>
-  );
-}
-
-function FormSubmissionConfirmation() {
-  return (
-    <>
-      <h1 className="text-2xl font-semibold text-center">
-        Thank you for your submission!
-      </h1>
-      <p className="text-center">
-        You should see your submission here shortly.
-      </p>
-    </>
   );
 }
