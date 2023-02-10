@@ -1,6 +1,7 @@
 import styles from "./page.module.css";
 import { Client } from "@notionhq/client";
-import NotionForm from "./NotionForm";
+// import NotionForm from "./JSNotionForm";
+import StaticNotionForm from "./StaticNotionForm";
 import Image from "next/image";
 import me from "../public/meme.png";
 import berserk from "../public/berserk2x.png";
@@ -33,7 +34,8 @@ export default async function Home() {
         width={300}
       />
       <BookList books={books} />
-      <NotionForm />
+      {/* <NotionForm /> */}
+      <StaticNotionForm />
       <div className="flex flex-col justify-center items-center space-x-2 space-y-2">
         <Image
           src={berserk}

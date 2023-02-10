@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "@notionhq/client";
+import { redirect } from "next/dist/server/api-utils";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 let databaseId = process.env.NOTION_DATABASE_ID || "";
@@ -77,6 +78,7 @@ export default async function handler(
       },
     });
     res.status(200).json({ data: `${book}`, submitted: true });
+    redirect(res.status(200), "/recommendation");
   } else {
     res.status(405).json({ error: "Method not allowed", submitted: false });
   }

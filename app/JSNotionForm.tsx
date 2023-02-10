@@ -6,7 +6,7 @@ import Image from "next/image";
 import smilesmiley from "../public/smilesmiley.png";
 
 export default function PostBookToNotion() {
-  const [hasSubmitted, setHasSubmitted] = useState(true);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
