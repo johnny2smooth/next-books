@@ -9,75 +9,80 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { author, genre, rating, review, book, reviewer, emoji } = req.body;
+    try {
+      const { author, genre, rating, review, book, reviewer, emoji } = req.body;
 
-    const response = await notion.pages.create({
-      parent: {
-        database_id: databaseId,
-      },
-      icon: {
-        type: "emoji",
-        emoji: "📚",
-      },
-      properties: {
-        Name: {
-          title: [
-            {
-              text: {
-                content: book,
-              },
-            },
-          ],
+      const response = await notion.pages.create({
+        parent: {
+          database_id: databaseId,
         },
-        Author: {
-          rich_text: [
-            {
-              text: {
-                content: author,
-              },
-            },
-          ],
+        icon: {
+          type: "emoji",
+          emoji: "📚",
         },
-        Genre: {
-          rich_text: [
-            {
-              text: {
-                content: genre,
+        properties: {
+          Name: {
+            title: [
+              {
+                text: {
+                  content: book,
+                },
               },
-            },
-          ],
-        },
-        Rating: {
-          rich_text: [
-            {
-              text: {
-                content: rating,
+            ],
+          },
+          Author: {
+            rich_text: [
+              {
+                text: {
+                  content: author,
+                },
               },
-            },
-          ],
-        },
-        Review: {
-          rich_text: [
-            {
-              text: {
-                content: review,
+            ],
+          },
+          Genre: {
+            rich_text: [
+              {
+                text: {
+                  content: genre,
+                },
               },
-            },
-          ],
-        },
-        Reviewer: {
-          rich_text: [
-            {
-              text: {
-                content: reviewer,
+            ],
+          },
+          Rating: {
+            rich_text: [
+              {
+                text: {
+                  content: rating,
+                },
               },
-            },
-          ],
+            ],
+          },
+          Review: {
+            rich_text: [
+              {
+                text: {
+                  content: review,
+                },
+              },
+            ],
+          },
+          Reviewer: {
+            rich_text: [
+              {
+                text: {
+                  content: reviewer,
+                },
+              },
+            ],
+          },
         },
-      },
-    });
-    if (res.status(200)) {
-      res.redirect(307, "/recommendation");
+      });
+      if (res.status(200)) {
+        await res.revalidate("/");
+        res.redirect(302, "/recommendation");
+      }
+    } catch (err) {
+      return res.status(500).send("Error revalidating");
     }
   } else {
     res.status(405).json({ error: "Method not allowed", submitted: false });
