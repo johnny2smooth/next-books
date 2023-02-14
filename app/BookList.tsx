@@ -1,7 +1,10 @@
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 export default function BookList({ books }: { books: PageObjectResponse[] }) {
   return (
-    <div className="border-4 bg-black border-slate-50 rounded-md grid p-6 gap-8 max-h-[75vh] overflow-scroll shadow-[inset_5px_-25px_40px_-25px] shadow-slate-200">
+    <div className="drawn-box bg-black rounded-md grid p-6 gap-8 h-[85vh] overflow-scroll shadow-[inset_5px_-25px_40px_-25px] shadow-slate-200">
+      <div className="drawn-box">
+        <h1 className="text-5xl">Books we recommend</h1>
+      </div>
       {books.map((book) => {
         const { id, properties, icon } = book as PageObjectResponse;
         let { Rating, Review, Author, Genre, Reviewer, Name } = properties;
@@ -21,7 +24,7 @@ export default function BookList({ books }: { books: PageObjectResponse[] }) {
               .split(" ")
               .join("+")}&oq=${title.split(" ").join("+")}`}
           >
-            <div className="border-2 border-slate-50 rounded p-4 stack max-w-xl px-4 bg-black text-slate-100 shadow-sm shadow-slate-100 hover:shadow-[20px_25px_30px_-15px_rgba(255,255,255,.2)]  hover:border-slate-200 hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-300 ease-in-out transform hover:scale-103 ">
+            <div className="drawn-box rounded p-4 stack max-w-xl px-4 bg-black text-slate-100   hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-300 ease-in-out transform hover:scale-103 ">
               <h2 className="text-4xl">
                 {emoji} {title}{" "}
                 <span className="text-sm">

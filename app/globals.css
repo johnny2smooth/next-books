@@ -110,6 +110,12 @@ a {
   }
 }
 
+.drawn-box {
+  padding: 0.15rem;
+  border: 22px solid;
+  border-image: url("/box1white.png") 30 stretch;
+}
+
 .stack {
   display: flex;
   flex-direction: column;

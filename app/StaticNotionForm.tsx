@@ -4,7 +4,7 @@ export default function StaticNotionForm() {
       action="/api/notion-form"
       method="POST"
       id="form"
-      className="p-6 stack w-2xl overflow-scroll text-slate-200"
+      className="p-6 stack w-2xl overflow-scroll text-slate-200 drawn-box"
     >
       <label htmlFor="book">What is the Book&apos;s title</label>
       <input type="text" id="book" name="book" required />

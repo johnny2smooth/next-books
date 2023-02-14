@@ -25,7 +25,9 @@ export default async function Home() {
   const books = await getBooks();
 
   return (
-    <main className={`${styles.main} flex-wrap space-x-4 space-y-4 pr-4`}>
+    <main
+      className={`${styles.main} drawn-box flex-wrap space-x-4 space-y-4 pr-4`}
+    >
       <Image
         src={me}
         placeholder="blur"
