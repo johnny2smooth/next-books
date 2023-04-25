@@ -2,7 +2,7 @@
 
 I wanted to use Notion as a simple DB to store book recommendations while I tried out Next 13. I used simple fetch requests and Notion's JavaScript SDK to achieve this. I also used Tailwind to style the page.
 
-**Send me a rec:** [link]("https://book-recommendations.vercel.app/")
+**Send me a rec:** https://next-books-johnny2smooth.vercel.app/
 
 ## How It's Made
 
