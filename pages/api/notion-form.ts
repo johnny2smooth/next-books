@@ -78,11 +78,10 @@ export default async function handler(
         },
       });
       if (res.status(200)) {
-        await res.revalidate("/");
         res.redirect(302, "/recommendation");
       }
     } catch (err) {
-      return res.status(500).send("Error revalidating");
+      console.error(err);
     }
   } else {
     res.status(405).json({ error: "Method not allowed", submitted: false });

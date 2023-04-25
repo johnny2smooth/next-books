@@ -2,9 +2,6 @@ import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 export default function BookList({ books }: { books: PageObjectResponse[] }) {
   return (
     <div className="drawn-box bg-black rounded-md grid p-6 gap-8 h-[85vh] overflow-scroll shadow-[inset_5px_-25px_40px_-25px] shadow-slate-200">
-      <div className="drawn-box">
-        <h1 className="text-5xl">Books we recommend</h1>
-      </div>
       {books.map((book) => {
         const { id, properties, icon } = book as PageObjectResponse;
         let { Rating, Review, Author, Genre, Reviewer, Name } = properties;
