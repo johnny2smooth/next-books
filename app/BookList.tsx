@@ -1,5 +1,12 @@
-import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-export default function BookList({ books }: { books: PageObjectResponse[] }) {
+import {
+  PageObjectResponse,
+  PartialPageObjectResponse,
+} from "@notionhq/client/build/src/api-endpoints";
+export default function BookList({
+  books,
+}: {
+  books: (PageObjectResponse | PartialPageObjectResponse)[];
+}) {
   return (
     <div className="drawn-box bg-black rounded-md grid p-6 gap-8 h-[85vh] overflow-scroll shadow-[inset_5px_-25px_40px_-25px] shadow-slate-200">
       {books.map((book) => {
@@ -35,8 +42,11 @@ export default function BookList({ books }: { books: PageObjectResponse[] }) {
               </p>
               <div className="flex justify-between">
                 <p className="text-sm">
-                  A {Genre.type === "select" && Genre.select.name} book reviewed
-                  by{" "}
+                  A{" "}
+                  {Genre.type === "select" && Genre.select
+                    ? Genre.select.name
+                    : ""}{" "}
+                  book reviewed by{" "}
                   {Reviewer.type === "rich_text" &&
                     Reviewer.rich_text[0].plain_text}
                 </p>
